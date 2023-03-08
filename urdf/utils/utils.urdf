@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="pi" value="3.141592"/>
+
+    <xacro:property name="yaml_file" value="$(find simulator)/config/car_parameters.yaml" />
+	<xacro:property name="parameters" value="${xacro.load_yaml(yaml_file)}"/>
+
+    <xacro:property name="wheel_mass"     value="${parameters['wheel']['mass']}"/>
+    <xacro:property name="wheel_diameter" value="${parameters['wheel']['diameter']}"/>
+    <xacro:property name="wheel_width" value="${parameters['wheel']['width']}"/>
+
+    <xacro:property name="wheel_friction_mu1" value="${parameters['wheel']['mu_longitudinal']}"/>
+    <xacro:property name="wheel_friction_mu2" value="${parameters['wheel']['mu_lateral']}"/>
+    <xacro:property name="wheel_friction_kp"  value="${parameters['wheel']['contact_stiffness']}"/>
+
+    <xacro:property name="steering_hinge_mass" value="1"/>
+    <xacro:property name="chassis_width" value="1.15"/>
+    <xacro:property name="wheelbase" value = "1.532" />
+
+    <xacro:macro name="box_inertia" params="m w h d">
+        <inertial>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+            <mass value="${m}"/>
+            <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}"/>
+        </inertial>
+    </xacro:macro>
+ 
+    <xacro:macro name="cylinder_inertia" params="m r h">
+        <inertial>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+            <mass value="${m}"/>
+            <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
+        </inertial>
+    </xacro:macro>
+ 
+    <xacro:macro name="sphere_inertia" params="m r">
+        <inertial>
+            <mass value="${m}"/>
+            <inertia ixx="${(2/5) * m * (r*r)}" ixy="0.0" ixz="0.0" iyy="${(2/5) * m * (r*r)}" iyz="0.0" izz="${(2/5) * m * (r*r)}"/>
+        </inertial>
+    </xacro:macro>
+
+    
+        
+</robot>

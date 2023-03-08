@@ -1,0 +1,42 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 10
+
+car_steering_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - left_steering_hinge_joint
+    - right_steering_hinge_joint
+
+car_wheel_controller:
+  type: effort_controllers/JointGroupEffortController
+  joints:
+    - front_left_wheel_joint #shaft_to_rear_left_wheel
+    - front_right_wheel_joint #shaft_to_rear_right_wheel
+    - rear_left_wheel_joint
+    - rear_right_wheel_joint
+  gains: # warning : pid values have no effects on output for effort controllers
+    front_left_wheel_joint: {p: 100, i: 1, d: 1, i_clamp: 1}
+    front_right_wheel_joint: {p: 100, i: 1, d: 1, i_clamp: 1}
+    rear_left_wheel_joint: {p: 100, i: 1, d: 1, i_clamp: 1}
+    rear_right_wheel_joint: {p: 100, i: 1, d: 1, i_clamp: 1}
+
+# car_front_left_wheel_controller:
+#   type: effort_controllers/JointVelocityController
+#   joint: front_left_wheel_joint
+#   pid: {p: 100, i: 100, d: 1}
+
+# car_front_right_wheel_controller:
+#   type: effort_controllers/JointVelocityController
+#   joint: front_right_wheel_joint
+#   pid: {p: 100, i: 100, d: 1}
+
+# car_rear_left_wheel_controller:
+#   type: effort_controllers/JointVelocityController
+#   joint: rear_left_wheel_joint
+#   pid: {p: 100, i: 100, d: 1, i_clamp: 1}
+
+# car_rear_right_wheel_controller:
+#   type: effort_controllers/JointVelocityController
+#   joint: rear_right_wheel_joint
+#   pid: {p: 100, i: 100, d: 1, i_clamp: 1}

@@ -1,0 +1,13 @@
+# wheel parameters
+wheel:
+  mass: 10
+  diameter: 0.505
+  width: 0.2
+  mu_longitudinal: 2
+  mu_lateral: 2
+  contact_stiffness: 10000000
+  contact_damping: 0
+
+steering:
+  min_angle: -0.52
+  max_angle: 0.52

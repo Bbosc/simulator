@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot name="wheel" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="configuration_file" value="$(find simulator)/config/car_parameters.yaml"/>
+  <xacro:property name="parameters" value="${xacro.load_yaml(configuration_file)}"/>
+
+  <xacro:property name="scale" value="0.001"/>
+
+  <xacro:property name="wheel_mass" value="${parameters['wheel']['mass']}"/>
+  <xacro:property name="wheel_friction_mu1" value="${parameters['wheel']['mu_longitudinal']}"/>
+  <xacro:property name="wheel_friction_mu2" value="${parameters['wheel']['mu_lateral']}"/>
+  <xacro:property name="wheel_friction_kp"  value="${parameters['wheel']['contact_stiffness']}"/>
+
+  <xacro:property name="wheel_radius" value="${parameters['wheel']['diameter']/2}"/>
+  <xacro:property name="wheel_width" value="${parameters['wheel']['width']}"/>
+  <xacro:property name="wheel_base" value="1.5"/>
+
+  <xacro:property name="wheel_z_offset" value="0.221"/>
+
+  <xacro:property name="chassis_width" value="1.15"/>
+  <xacro:property name="wheel_ygap" value="0.035"/>
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
+    </inertial>
+  </xacro:macro>
+ 
+
+  <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/wheel.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+        <material name="Gray">
+          <color rgba="0.5 0.5 0.5 1.0"/>
+        </material>
+      </visual>
+ 
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/> 
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/wheel.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+      </collision>
+
+      <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" h="${wheel_width}"/>
+
+    </link>
+
+    <joint name="${prefix}_joint" type="continuous">
+      <parent link="chassis"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${x_reflect*wheel_base/2} ${y_reflect*(chassis_width/2 - wheel_width/2)} ${-wheel_z_offset}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <gazebo reference="${prefix}_${y_reflect}_wheel">
+      <material>Gazebo/Black</material>
+      <mu1>${wheel_friction_mu1}</mu1>
+      <mu2>${wheel_friction_mu2}</mu2>
+      <kp>${wheel_friction_kp}</kp>
+    </gazebo>
+
+  </xacro:macro>
+
+
+  
+</robot>

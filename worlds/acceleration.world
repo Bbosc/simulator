@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="acceleration">
+
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- A ground plane -->
+    <include>
+      <uri>model://dry_plane</uri>
+    </include>
+
+
+    <population name="blue_cones">
+      <model name="blue_cone_accel">
+        <include>
+          <static>true</static>
+          <uri>model://blue_cone</uri>
+        </include>
+      </model>
+      <pose>-1.5 37.5 0 0 0 0</pose>
+      <box>
+        <size>1 75 0.02</size>
+      </box>
+      <model_count>14</model_count>
+      <distribution>
+        <type>linear-y</type>
+      </distribution>
+    </population>
+
+    <population name="yellow_cones">
+      <model name="yellow_cone_accel">
+        <include>
+          <static>true</static>
+          <uri>model://yellow_cone</uri>
+        </include>
+      </model>
+      <pose>1.5 37.5 0 0 0 0</pose>
+      <box>
+        <size>1 75 0.02</size>
+      </box>
+      <model_count>14</model_count>
+      <distribution>
+        <type>linear-y</type>
+      </distribution>
+    </population>
+
+    <population name="orange_cones_l">
+      <model name="orange_cone_left">
+        <include>
+          <static>true</static>
+          <uri>model://orange_cone</uri>
+        </include>
+      </model>
+      <pose>-1.5 100.5 0 0 0 0</pose>
+      <box>
+        <size>1 50 0.02</size>
+      </box>
+      <model_count>7</model_count>
+      <distribution>
+        <type>linear-y</type>
+      </distribution>
+    </population>
+
+    <population name="orange_cones_r">
+      <model name="orange_cone_right">
+        <include>
+          <static>true</static>
+          <uri>model://orange_cone</uri>
+        </include>
+      </model>
+      <pose>1.5 100.5 0 0 0 0</pose>
+      <box>
+        <size>1 50 0.02</size>
+      </box>
+      <model_count>7</model_count>
+      <distribution>
+        <type>linear-y</type>
+      </distribution>
+    </population>
+
+  </world>
+</sdf>
