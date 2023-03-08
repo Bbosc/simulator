@@ -6,13 +6,19 @@
   <xacro:include filename="$(find simulator)/urdf/car_components.urdf"/>
   
   <link name="chassis">
-    <visual>
+	<visual>
 		<geometry>
-        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
+			<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
 		</geometry>
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 	</visual>
-		<collision>
+	<visual>
+		<geometry>
+        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/nose.stl" scale="${scale} ${scale} ${scale}"/>
+		</geometry>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+	</visual>
+	<collision>
 			<geometry>
         <mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
