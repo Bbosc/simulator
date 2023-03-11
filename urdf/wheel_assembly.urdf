@@ -14,8 +14,6 @@
   <xacro:property name="wheel_radius" value="${parameters['wheel']['diameter']/2}"/>
   <xacro:property name="wheel_width" value="${parameters['wheel']['width']}"/>
   <xacro:property name="wheel_base" value="${parameters['appearance']['wheelbase']}"/>
-  <xacro:property name="basewidth" value="${parameters['appearance']['basewidth']}"/> 
-  <xacro:property name="wheel_x" value="${parameters['wheel']['wheel_x']}"/>
   <xacro:property name="wheel_y" value="${parameters['wheel']['wheel_y']}"/>
   <xacro:property name="wheel_z" value="${parameters['wheel']['wheel_z']}"/>
 
@@ -34,7 +32,7 @@
   </xacro:macro>
  
 
-  <xacro:macro name="wheel" params="prefix is_rear is_left">
+  <xacro:macro name="wheel" params="prefix is_rear is_left reverse:=1">
     <link name="${prefix}_link">
       <visual>
         <origin xyz="0 0 0" rpy="${-is_left*pi + pi/2} 0 0"/>
@@ -66,19 +64,44 @@
 
     </link>
 
-    <joint name="${prefix}_joint" type="continuous">
-      <parent link="chassis"/>
-      <child link="${prefix}_link"/>
-      <origin xyz="${-is_rear*wheel_base} ${-wheel_y + 2*is_left*wheel_y} ${wheel_z}" rpy="0 0 0"/>
-      <axis xyz="0 1 0"/>
-    </joint>
-
     <gazebo reference="${prefix}_${is_left}_wheel">
       <material>Gazebo/Black</material>
       <mu1>${wheel_friction_mu1}</mu1>
       <mu2>${wheel_friction_mu2}</mu2>
       <kp>${wheel_friction_kp}</kp>
     </gazebo>
+
+    <!-- MOTOR -->
+
+    <link name="${prefix}_motor">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${reverse*pi/2}"/>
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/motor.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+      </visual>
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 ${pi/2} ${-reverse*pi/2}"/>
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/cooling_jacket.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}_motor_joint" type="continuous">
+      <parent link="chassis"/>
+      <child link="${prefix}_motor"/>
+      <origin xyz="${-is_rear*wheel_base} ${-wheel_y + 2*is_left*wheel_y} ${wheel_z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="${prefix}_motor"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+    
 
   </xacro:macro>
 
