@@ -7,7 +7,20 @@ wheel:
   mu_lateral: 2
   contact_stiffness: 10000000
   contact_damping: 0
+  wheel_x: 0.0
+  wheel_y: 0.66
+  wheel_z: 0.1915
 
 steering:
   min_angle: -0.52
   max_angle: 0.52
+
+appearance:
+  wheelbase: 1.570
+  basewidth: 1.327
+
+nose:
+  nose_x: 0.736
+  nose_y: 0.0
+  nose_z: 0.180
+

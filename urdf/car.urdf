@@ -4,6 +4,9 @@
   <xacro:property name="scale" value="0.001"/>
 
   <xacro:include filename="$(find simulator)/urdf/car_components.urdf"/>
+  <xacro:property name="nose_x" value="${parameters['nose']['nose_x']}"/>
+  <xacro:property name="nose_y" value="${parameters['nose']['nose_y']}"/>
+  <xacro:property name="nose_z" value="${parameters['nose']['nose_z']}"/>
   
   <link name="chassis">
 	<visual>
@@ -16,13 +19,13 @@
 		<geometry>
         	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/nose.stl" scale="${scale} ${scale} ${scale}"/>
 		</geometry>
-		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<origin xyz="${nose_x} ${nose_y} ${nose_z}" rpy="0 0 0"/>
 	</visual>
 	<collision>
-			<geometry>
-        <mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
-			</geometry>
-			<origin xyz="0 0 0" rpy="0 0 0"/>
+		<geometry>
+        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
+		</geometry>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
 		</collision>
 		<inertial> 
 			<mass value="190"/>
@@ -40,10 +43,10 @@
   	</xacro:macro>
  
 
-	<xacro:wheel prefix="drivewhl_rl" x_reflect="-1" y_reflect="1" />
-  	<xacro:wheel prefix="drivewhl_rr" x_reflect="-1" y_reflect="-1" />
-	<xacro:wheel prefix="drivewhl_fl" x_reflect="1" y_reflect="1" />
-  	<xacro:wheel prefix="drivewhl_fr" x_reflect="1" y_reflect="-1" />
+	<xacro:wheel prefix="drivewhl_rl" is_rear="1" is_left="1" />
+  	<xacro:wheel prefix="drivewhl_rr" is_rear="1" is_left="0" />
+	<xacro:wheel prefix="drivewhl_fl" is_rear="0" is_left="1" />
+  	<xacro:wheel prefix="drivewhl_fr" is_rear="0" is_left="0" />
 
 
 	<link name="base_link"/>

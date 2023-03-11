@@ -13,7 +13,12 @@
 
   <xacro:property name="wheel_radius" value="${parameters['wheel']['diameter']/2}"/>
   <xacro:property name="wheel_width" value="${parameters['wheel']['width']}"/>
-  <xacro:property name="wheel_base" value="1.5"/>
+  <xacro:property name="wheel_base" value="${parameters['appearance']['wheelbase']}"/>
+  <xacro:property name="basewidth" value="${parameters['appearance']['basewidth']}"/> 
+  <xacro:property name="wheel_x" value="${parameters['wheel']['wheel_x']}"/>
+  <xacro:property name="wheel_y" value="${parameters['wheel']['wheel_y']}"/>
+  <xacro:property name="wheel_z" value="${parameters['wheel']['wheel_z']}"/>
+
 
   <xacro:property name="wheel_z_offset" value="0.221"/>
 
@@ -29,10 +34,10 @@
   </xacro:macro>
  
 
-  <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
+  <xacro:macro name="wheel" params="prefix is_rear is_left">
     <link name="${prefix}_link">
       <visual>
-        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-is_left*pi + pi/2} 0 0"/>
         <geometry>
           <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/wheel.stl" scale="${scale} ${scale} ${scale}"/>
         </geometry>
@@ -41,7 +46,7 @@
         </material>
       </visual>
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 ${-wheel_width/2} 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="file://$(find simulator)/meshes/lrt4/wheel_assembly/tire.stl" scale="${scale} ${scale} ${scale}"/>
         </geometry>
@@ -64,11 +69,11 @@
     <joint name="${prefix}_joint" type="continuous">
       <parent link="chassis"/>
       <child link="${prefix}_link"/>
-      <origin xyz="${x_reflect*wheel_base/2} ${y_reflect*(chassis_width/2)} ${-wheel_z_offset}" rpy="0 0 0"/>
+      <origin xyz="${-is_rear*wheel_base} ${-wheel_y + 2*is_left*wheel_y} ${wheel_z}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
     </joint>
 
-    <gazebo reference="${prefix}_${y_reflect}_wheel">
+    <gazebo reference="${prefix}_${is_left}_wheel">
       <material>Gazebo/Black</material>
       <mu1>${wheel_friction_mu1}</mu1>
       <mu2>${wheel_friction_mu2}</mu2>
