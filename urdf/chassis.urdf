@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot name="chassis" xmlns:xacro="http://ros.org/wiki/xacro">
+    
+  <xacro:property name="configuration_file" value="$(find simulator)/config/car_parameters.yaml"/>
+  <xacro:property name="parameters" value="${xacro.load_yaml(configuration_file)}"/>
+
+  <xacro:property name="scale" value="0.001"/>
+
+  <xacro:property name="nose_x" value="${parameters['nose']['nose_x']}"/>
+  <xacro:property name="nose_y" value="${parameters['nose']['nose_y']}"/>
+  <xacro:property name="nose_z" value="${parameters['nose']['nose_z']}"/>
+
+  <xacro:property name="chassis_mass" value="${parameters['chassis']['mass']}"/>
+
+  <xacro:macro name="chassis" params="x_pos:=0 y_pos:=0 z_pos:=0">
+
+  <link name="chassis">
+	<visual>
+		<geometry>
+			<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/mono_cfd.stl" scale="${scale} ${scale} ${scale}"/>
+		</geometry>
+		<origin xyz="${x_pos} ${y_pos} ${z_pos}" rpy="0 0 0"/>
+	</visual>
+	<visual>
+		<geometry>
+        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/nose_cfd.stl" scale="${scale} ${scale} ${scale}"/>
+		</geometry>
+		<origin xyz="${nose_x} ${nose_y} ${nose_z}" rpy="0 0 0"/>
+	</visual>
+	<collision>
+		<geometry>
+        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
+		</geometry>
+		<origin xyz="${x_pos} ${y_pos} ${z_pos}" rpy="0 0 0"/>
+		</collision>
+		<inertial> 
+			<mass value="${chassis_mass}"/>
+			<inertia ixx="20" ixy="0" ixz="0" iyy="40" iyz="0.0" izz="150"/>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+		</inertial>
+    </link>
+
+
+    <link name="main_hoop">
+        <visual>
+            <geometry>
+                <mesh filename="file://$(find simulator)/meshes/lrt4/chassis/main_hoop.stl" scale="${scale} ${scale} ${scale}"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <mesh filename="file://$(find simulator)/meshes/lrt4/chassis/main_hoop.stl" scale="${scale} ${scale} ${scale}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="chassis_to_hoop" type="fixed">
+        <parent link="chassis"/>
+        <child link="main_hoop"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    </joint>
+    
+  </xacro:macro>
+
+
+</robot>

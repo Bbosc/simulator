@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot name="aero" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="configuration_file" value="$(find simulator)/config/car_parameters.yaml"/>
+  <xacro:property name="parameters" value="${xacro.load_yaml(configuration_file)}"/>
+
+  <xacro:property name="scale" value="0.001"/>
+
+  <xacro:macro name="aero_kit" params="parent:=chassis">
+    <link name="aero">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/aero/aero_ga.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="file://$(find simulator)/meshes/lrt4/aero/aero_ga.stl" scale="${scale} ${scale} ${scale}"/>
+        </geometry>
+      </collision>
+      
+    </link>
+    
+    <joint name="chassis_to_aero" type="fixed">
+      <parent link="${parent}"/>
+      <child link="aero"/>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      
+    </joint>
+
+  </xacro:macro>
+
+
+</robot>

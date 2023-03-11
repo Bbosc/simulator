@@ -4,45 +4,13 @@
   <xacro:property name="scale" value="0.001"/>
 
   <xacro:include filename="$(find simulator)/urdf/wheel_assembly.urdf"/>
-  <xacro:property name="nose_x" value="${parameters['nose']['nose_x']}"/>
-  <xacro:property name="nose_y" value="${parameters['nose']['nose_y']}"/>
-  <xacro:property name="nose_z" value="${parameters['nose']['nose_z']}"/>
+	<xacro:include filename="$(find simulator)/urdf/chassis.urdf"/>
+	<xacro:include filename="$(find simulator)/urdf/aero.urdf"/>
   
-  <link name="chassis">
-	<visual>
-		<geometry>
-			<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/mono_cfd.stl" scale="${scale} ${scale} ${scale}"/>
-		</geometry>
-		<origin xyz="0 0 0" rpy="0 0 0"/>
-	</visual>
-	<visual>
-		<geometry>
-        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/nose.stl" scale="${scale} ${scale} ${scale}"/>
-		</geometry>
-		<origin xyz="${nose_x} ${nose_y} ${nose_z}" rpy="0 0 0"/>
-	</visual>
-	<collision>
-		<geometry>
-        	<mesh filename="file://$(find simulator)/meshes/lrt4/chassis/monocoque.stl" scale="${scale} ${scale} ${scale}"/>
-		</geometry>
-		<origin xyz="0 0 0" rpy="0 0 0"/>
-		</collision>
-		<inertial> 
-			<mass value="190"/>
-			<inertia ixx="20" ixy="0" ixz="0" iyy="40" iyz="0.0" izz="150"/>
-            <origin xyz="0 0 0" rpy="0 0 0" />
-		</inertial>
-	</link>
-
-	<xacro:macro name="cylinder_inertia" params="m r h">
-    	<inertial>
-      		<origin xyz="0 0 0" rpy="${pi/2} 0 0" />
-      		<mass value="${m}"/>
-      		<inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
-    	</inertial>
-  	</xacro:macro>
+  <xacro:chassis />
+	<!-- uncomment statement below to remove the aerodynamics -->
+	<!-- <xacro:aero_kit /> -->
  
-
 	<xacro:wheel prefix="drivewhl_rl" is_rear="1" is_left="1" />
   	<xacro:wheel prefix="drivewhl_rr" is_rear="1" is_left="0" reverse="-1" />
 	<xacro:wheel prefix="drivewhl_fl" is_rear="0" is_left="1"/>
