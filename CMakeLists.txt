@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
 project(simulator)
 
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -9,11 +13,24 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(gazebo_ros REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(xacro REQUIRED)
 find_package(rclpy REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+add_executable(talker scripts/talker.cpp)
+ament_target_dependencies(talker rclcpp std_msgs)
+
+add_executable(listener scripts/listener.cpp)
+ament_target_dependencies(listener rclcpp std_msgs)
+
+
+install(TARGETS
+  talker
+  listener
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -50,6 +67,7 @@ install(
     launch
     worlds
     urdf
+    scripts
     meshes
     config
   DESTINATION share/${PROJECT_NAME}/

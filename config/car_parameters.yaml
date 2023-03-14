@@ -24,3 +24,5 @@ nose:
   nose_y: 0.0
   nose_z: 0.180
 
+chassis:
+  mass: 190

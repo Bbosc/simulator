@@ -32,8 +32,8 @@
   </xacro:macro>
  
 
-  <xacro:macro name="wheel" params="prefix is_rear is_left reverse:=1">
-    <link name="${prefix}_link">
+  <xacro:macro name="wheel" params="prefix is_rear is_left name reverse:=1">
+    <link name="${name}_link">
       <visual>
         <origin xyz="0 0 0" rpy="${-is_left*pi + pi/2} 0 0"/>
         <geometry>
@@ -64,7 +64,7 @@
 
     </link>
 
-    <gazebo reference="${prefix}_${is_left}_wheel">
+    <gazebo reference="${name}_wheel">
       <material>Gazebo/Black</material>
       <mu1>${wheel_friction_mu1}</mu1>
       <mu2>${wheel_friction_mu2}</mu2>
@@ -73,7 +73,7 @@
 
     <!-- MOTOR -->
 
-    <link name="${prefix}_motor">
+    <link name="${name}_motor">
       <visual>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${reverse*pi/2}"/>
         <geometry>
@@ -88,19 +88,30 @@
       </visual>
     </link>
 
-    <joint name="${prefix}_motor_joint" type="continuous">
+    <joint name="${name}_motor_joint" type="continuous">
       <parent link="chassis"/>
-      <child link="${prefix}_motor"/>
+      <child link="${name}_motor"/>
       <origin xyz="${-is_rear*wheel_base} ${-wheel_y + 2*is_left*wheel_y} ${wheel_z}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
     </joint>
 
-    <joint name="${prefix}_joint" type="fixed">
-      <parent link="${prefix}_motor"/>
-      <child link="${prefix}_link"/>
+    <joint name="${name}_joint" type="fixed">
+      <parent link="${name}_motor"/>
+      <child link="${name}_link"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
     </joint>
+
+    <transmission name="${name}_hub">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="${name}_motor">
+        <mechanicalReduction>13.2</mechanicalReduction>
+        <!-- <hardware_interface>EffortJointInterface</hardware_interface> -->
+      </actuator>
+      <joint name="${name}_joint">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+    </transmission>
     
 
   </xacro:macro>
